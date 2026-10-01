@@ -208,11 +208,13 @@ void displayBoard() {
     cout << "WHITE: " << whites << "     BLACK: " << blacks << endl;
     movesToMake = checkMoves(activePlayer);
     set<pair<int,int>> noDupeMoves(movesToMake.begin(), movesToMake.end());
+    if (whites + blacks != 64){
     cout << "Possible Moves: " << endl;
     for (const auto& elem : noDupeMoves){
         cout << "(" << elem.first << "," << elem.second << ")";
     }
     cout << endl;
+    }
 }
 
 void makeMove(){
@@ -220,6 +222,9 @@ void makeMove(){
     int y;
     vector<pair<int,int>> piecesToFlip;
     vector<pair<int,int>> potentialFlips;
+    if (whites + blacks == 64){
+        return;
+    }
     if (movesToMake.empty()){
         cout << "No moves to make! Previous player goes again" << endl;
         return;
@@ -241,7 +246,7 @@ void makeMove(){
         vert = x - 1;
         horiz = y - 1;
         while (vert >= 0 && horiz >= 0){
-            if (vert == 0 && horiz == 0){
+            if (vert == 0 && horiz == 0 && gameBoard[vert][horiz] != activePlayer){
             vert = -1;
             horiz = -1;
             potentialFlips.clear();
@@ -270,7 +275,7 @@ void makeMove(){
     if (gameBoard[x - 1][y] != unplayed && gameBoard[x - 1][y] != activePlayer){
         vert = x - 1;
         while (vert >= 0){
-            if (vert == 0){
+            if (vert == 0 && gameBoard[vert][y] != activePlayer){
             vert = -1;
             potentialFlips.clear();
             break;
@@ -296,7 +301,7 @@ void makeMove(){
         vert = x - 1;
         horiz = y + 1;
         while (vert >= 0 && horiz <= 7){
-            if (vert == 0 && horiz == 7){
+            if (vert == 0 && horiz == 7 && gameBoard[vert][horiz] != activePlayer){
             vert = -1;
             horiz = 8;
             potentialFlips.clear();
@@ -325,7 +330,7 @@ void makeMove(){
     if (gameBoard[x][y-1] != activePlayer && gameBoard[x][y-1] != unplayed){
         horiz = y - 1;
         while(horiz >= 0){
-            if ((horiz == 0 && x == 0) || (horiz == 0 && x == 7)){
+            if (((horiz == 0 && x == 0) || (horiz == 0 && x == 7)) && (gameBoard[x][horiz] != activePlayer)){
                 horiz = -1;
                 potentialFlips.clear();
                 break;
@@ -350,7 +355,7 @@ void makeMove(){
     if (gameBoard[x][y+1] != activePlayer && gameBoard[x][y+1] != unplayed){
         horiz = y + 1;
         while(horiz <= 7){
-            if ((x == 0 && horiz == 7) || (x == 7 && horiz == 7)){
+            if (((x == 0 && horiz == 7) || (x == 7 && horiz == 7)) && (gameBoard[x][horiz] != activePlayer)){
                 horiz = 8;
                 potentialFlips.clear();
                 break;
@@ -376,7 +381,7 @@ void makeMove(){
         vert = x + 1;
         horiz = y - 1;
         while(vert <= 7 && horiz >= 0){
-            if (vert == 7 && horiz == 0){
+            if (vert == 7 && horiz == 0 && gameBoard[vert][horiz] != activePlayer){
             vert = 8;
             horiz = -1;
             potentialFlips.clear();
@@ -405,7 +410,7 @@ void makeMove(){
     if (gameBoard[x+1][y] != activePlayer && gameBoard[x+1][y] != unplayed){
         vert = x + 1;
         while(vert <= 7){
-            if ((vert == 7 && y == 0) || (vert == 7 && y == 7)){
+            if (((vert == 7 && y == 0) || (vert == 7 && y == 7)) && (gameBoard[vert][y] != activePlayer)){
             vert = 8;
             potentialFlips.clear();
             break;
@@ -431,7 +436,7 @@ void makeMove(){
         vert = x + 1;
         horiz = y + 1;
         while(vert <= 7 && horiz <= 7){
-            if (vert == 7 && horiz == 7){
+            if (vert == 7 && horiz == 7 && gameBoard[vert][horiz] != activePlayer){
             vert = 8;
             horiz = 8;
             potentialFlips.clear();
